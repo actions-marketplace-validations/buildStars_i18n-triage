@@ -55,7 +55,7 @@ h1::after { content: '样式中文'; }
   it('classifies every remaining string exactly as the rule table says', () => {
     expect(results.map(brief)).toEqual([
       'D_INTERNAL_KEY 已下架 (d-internal-key)', // { '已下架': 1 }
-      'A_UI_TEXT 部门 (fallback)', // { label: '部门' } in a view, 1 sibling → not a dict
+      'A_UI_TEXT 部门 (a-ui-text)', // { label: '部门' }: label is a display prop → confident A
       'D_INTERNAL_KEY 快速 (d-internal-key)', // enum member
       'B_DEBUG_LOG 加载失败 (b-debug-log)', // console.error
       'A_UI_TEXT 保存成功 (a-ui-text)', // showToast('...')
@@ -63,7 +63,7 @@ h1::after { content: '样式中文'; }
       'A_UI_TEXT 裸字面量 (fallback)',
       'A_UI_TEXT 标题 (a-ui-text)', // title="标题"
       'A_UI_TEXT 请输入订单号 (a-ui-text)', // placeholder
-      'A_UI_TEXT 埋点名 (fallback)', // data-track: not whitelisted → conservative A
+      'D_INTERNAL_KEY 埋点名 (d-internal-key)', // data-track: tracking attribute → internal key
       'A_UI_TEXT 暂无数据 (a-ui-text)', // text node
       'A_UI_TEXT 点击了 (a-ui-text)', // @click="showToast('点击了')"
       'A_UI_TEXT 按钮 (a-ui-text)', // text node
@@ -106,7 +106,7 @@ console.log('字典加载完成')`
       'C_DICT 待发货 (c-dict)',
       'C_DICT 已发货 (c-dict)',
       'C_DICT 已下架 (c-dict)',
-      'A_UI_TEXT 只有一个 (fallback)',
+      'A_UI_TEXT 只有一个 (a-ui-text)', // { label } below the dict threshold → still a display prop
       'B_DEBUG_LOG 字典加载完成 (b-debug-log)',
     ])
   })
@@ -117,6 +117,7 @@ describe('端到端：同一份对象在 views/ 下不是字典', () => {
     const src = `export const COLOR_OPTIONS = [{ label: '红色', value: 1 }, { label: '蓝色', value: 2 }, { label: '绿色', value: 3 }]`
     const { results } = run(src, 'src/views/product.ts')
     expect(results.map((r) => r.category)).toEqual(['A_UI_TEXT', 'A_UI_TEXT', 'A_UI_TEXT'])
-    expect(results.every((r) => r.matchedBy === 'fallback')).toBe(true)
+    // label 是展示 prop，所以是规则命中的 A 而不是待确认；关键是它不是 C
+    expect(results.every((r) => r.matchedBy === 'a-ui-text')).toBe(true)
   })
 })
