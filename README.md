@@ -194,7 +194,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: buildStars/i18n-triage@v0.1.0
+      - uses: buildStars/i18n-triage@v0.3.1
         with:
           paths: src
           only: A,C

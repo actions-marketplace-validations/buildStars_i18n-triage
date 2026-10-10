@@ -165,7 +165,7 @@ kind 判定的关键语义（详表见 `docs/ts-morph-kinds.md`、`docs/vue-temp
 - **npm**：`i18n-triage@0.1.0` 已于 2026-09-09 发布（tag `v0.1.0`）。发布用 granular access token（必须勾 Bypass 2FA，npm 现在强制要求 2FA 或 bypass token），token 存在用户 `~/.npmrc`，**不要把 token 写进仓库或对话**。根 `pnpm release:dry` 打包演练，`pnpm release` 只发 CLI；`pnpm release:libs` 发两个 scope 包，前提是 npm 上建了 `i18n-triage` org（尚未）。发新版本：改三个 package.json 的 version → CHANGELOG → commit → `pnpm release` → `git tag vX.Y.Z && git push origin vX.Y.Z`。`pnpm pack` 已验证：产物只含 dist + LICENSE + README，manifest 的 main / exports 已切到 dist，装进空项目后 bin 可直接运行。
 - **仓库**：https://github.com/buildStars/i18n-triage（`origin`，分支 `main`）。README / action 里的 owner 已替换，SARIF 的 `informationUri` 指向它。CI 全绿的判断标准是 5 个 job（check ×2、action-smoke、runtime-smoke ×2）都 success。
 - **CLI 的 dts 构建用 `packages/cli/tsconfig.build.json`**（tsdown `tsconfig` 选项）：它把 core / reporters 的源码也列进 include。rolldown-plugin-dts 的 eager 模式会给每个「不在 tsconfig 根文件列表里」的模块单独 new 一个 TS Program，每个 Program 都要加载 ts-morph → typescript 的类型，几十个模块就把默认 4 GB 堆撑爆（locales 加进来后 CI Build 步骤 OOM 过一次）；只建一个 Program 后构建约 1 s。新增 workspace 包要打进 CLI 时同步加进这个 include。
-- 已发版本：0.1.0（基础审计 + SARIF + Action）、0.2.0（`--fix`）。`locales` 子命令在 CHANGELOG 的 0.3.0 (unreleased) 里，发版要用户点头。
+- 已发版本：0.1.0（基础审计 + SARIF + Action）、0.2.0（`--fix`）、0.3.0（`locales` 子命令）、0.3.1（示例文案中性化）。发版要用户点头。
 
 ## `--fix` 约定（已实现）
 

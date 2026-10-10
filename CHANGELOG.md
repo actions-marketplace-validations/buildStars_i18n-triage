@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 (2026-10-11)
+
+- docs, tests: replace domain-specific sample strings with neutral wording; no behaviour change
+- README: GitHub Action example now points at `@v0.3.1`
+
 ## 0.3.0 (2026-09-09)
 
 - `i18n-triage locales [paths]`: locale completeness (missing / extra / empty per target locale), dead keys, keys possibly used via a dynamic-call prefix or a matching string literal (route meta, menu configs), and undefined keys with locations; JSON and TS/JS locale modules, flat and `<locale>/<namespace>` layouts; `--source`, `--locale-files`, `--format text|json`, exit 1 as a CI gate; config block `locales`
